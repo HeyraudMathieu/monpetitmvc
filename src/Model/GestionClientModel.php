@@ -3,7 +3,7 @@ namespace APP\Model;
 
 use \PDO;
 use APP\Entity\Client;
-use Tools\Connexion;
+use includes\Connexion;
 
 class GestionClientModel {
     
