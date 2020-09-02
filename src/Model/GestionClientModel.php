@@ -3,7 +3,7 @@ namespace APP\Model;
 
 use \PDO;
 use APP\Entity\Client;
-use includes\Connexion;
+use Tools\Connexion;
 
 class GestionClientModel {
     
@@ -14,6 +14,13 @@ class GestionClientModel {
         $ligne->bindValue(':id', $id, PDO::PARAM_INT);
         $ligne->execute();
         return $ligne->fetchObject(Client::class);
+    }
+    
+    public function findAll(){
+        $unObjetPdo = Connexion::getConnexion();
+        $sql = "select * from client";
+        $ligne = $unObjetPdo->query($sql);
+        return $ligne->fetchAll(PDO::FETCH_CLASS ,Client::class);
     }
     
 }
