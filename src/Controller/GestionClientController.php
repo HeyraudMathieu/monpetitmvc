@@ -14,7 +14,9 @@ class GestionClientController {
         $unClient = $model->find($id);
         if($unClient) {
             $r = new ReflectionClass($this);
-            include_once PATH_VIEW . str_replace('Controller', 'View', $r->getShortName()) ."/unClient.php";
+            //include_once PATH_VIEW . str_replace('Controller', 'View', $r->getShortName()) ."/unClient.php";
+            $vue = str_replace('Controller', 'View', $r->getShortName()) ."/unClient.html.twig";
+            \Tools\MyTwig::afficheVue($vue, array('unClient' => $unClient));
         } else {
             throw new Exception("Client " . $id . " inconnu");
         }
@@ -23,13 +25,19 @@ class GestionClientController {
     public function chercheTous() {
         // appel de la méthode findAll()
         $model = new GestionClientModel();
-        $clients = $model->findAll();
-        if($clients) {
+        $tousClients = $model->findAll();
+        if($tousClients) {
             $r = new ReflectionClass($this);
-            include_once PATH_VIEW . str_replace('Controller', 'View', $r->getShortName()) ."/plusieursClients.php";
+            $vue = str_replace('Controller', 'View', $r->getShortName()) ."/tousClients.html.twig";
+            \Tools\MyTwig::afficheVue($vue, array('tousClients' => $tousClients));
         } else {
             throw new Exception("Aucun client à afficher");
         }
+    }
+    
+    public function creerClient($params) {
+        $vue = "GestionClientView\\creerClient;html.twig";
+        \Tools\MyTwig::afficheVue($vue, array());
     }
     
 }

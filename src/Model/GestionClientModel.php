@@ -23,4 +23,17 @@ class GestionClientModel {
         return $ligne->fetchAll(PDO::FETCH_CLASS ,Client::class);
     }
     
+    public function recupChampTable() {
+        $unObjetPdo = Connexion::getConnexion();
+        $sql = "SELECT column_name FROM information_schema.columns WHERE table_name = 'client' AND table_schema='clicommvc';";
+        $ligne = $unObjetPdo->query($sql);
+        return $ligne->fetchAll(PDO::FETCH_CLASS ,Client::class);
+    }
+    
+    public function enregistreClient($client) {
+        $unObjetPdo = Connexion::getConnexion();
+        $sql = "insert into client(titreCli, nomCli, prenomCli, adresseRue1Cli, adresseRue2Cli, cpCli, villeCli, telCli)"
+                . "values (:titreCli, :nomCli, :prenomCli, :adresseRue1Cli, :adresseRue2Cli)";
+    }
+    
 }
