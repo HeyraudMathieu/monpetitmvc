@@ -26,6 +26,7 @@ class GestionClientController {
         \Tools\MyTwig::afficheVue($vue, $params);
     }
     
+    
     public function chercheTous() {
         // appel de la méthode findAll()
         //$model = new GestionClientModel();
@@ -110,6 +111,15 @@ class GestionClientController {
         $r = new \ReflectionClass($this);
         $vue = str_replace('Controller', 'View', $r->getShortName()) . "/tousClients.html.twig";
         \Tools\MyTwig::afficheVue($vue, array('tousClients' => $clients));
+    }
+    
+    public function chercheUnAjax($params): void {
+        $repository = Repository::getRepository("APP\Entity\Client");
+        $ids = $repository->findIds();
+        $params['lesIds'] = $ids;
+        $r = new ReflectionClass($this);
+        $vue = str_replace('Controller', 'View', $r->getShortName()) . "/unClientAjax.html.twig";
+        \Tools\MyTwig::afficheVue($vue, $params);
     }
     
 }
