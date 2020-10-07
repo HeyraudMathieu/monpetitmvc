@@ -77,8 +77,59 @@ class Repository {
     public function countRows() {
         $sql = "select count(*) from " . $this->table;
         $lignes = $this->connexion->query($sql);
-        $nbClients = $lignes->fetch(PDO::FETCH_NUM);
+        $nbClients = $lignes->fetchColumn(0);
         return $nbClients;
     }
     
+    public function __call($methode, $params) {
+        if(preg_match("#^findBy#", $methode)){
+            return $this->traiteFindBy($methode, array_values($params[0]));
+        }
+    }
+    
+    public function traiteFindBy($methode, $params){
+        $criteres = str_replace("findBy", "", $methode);
+        $criteres = explode("_and_", $criteres);
+        if(count($criteres) > 0){
+            $sql = 'select * from ' . $this->table . " where ";
+            $pasPremier = false;
+            foreach ($criteres as $critere) {
+                if($pasPremier){
+                    $sql .= ' and ';
+                }
+                $sql .= $critere . " = ? ";
+                $pasPremier = true;
+            }
+            $lignes = $this->connexion->prepare($sql);
+            $lignes->execute($params);
+            $lignes->setFetchMode(PDO::FETCH_CLASS, $this->classeNameLong, null);
+            return $lignes->fetchAll();
+        }
+                
+    }
+    
+    public function findColumnDistinctValues($colonne){
+        $sql = "select distinct " . $colonne . " from " . $this->table . " order by 1";
+        $tab = $this->connexion->query($sql)->fetchAll(PDO::FETCH_COLUMN);
+        return $tab;
+    }
+    
+   public function findBy($params){
+       $element = "Choisir...";
+       while(in_array($element, $params)){
+           unset($params[array_search($element, $params)]);
+       }
+       $cles = array_keys($params);
+       $methode = "findBy";
+       for ($i = 0; $i < count($cles); $i++) {
+           if($i > 0) {
+               $methode .= "_and_";
+           }
+           $methode .= $cles[$i];
+       }
+       return $this->traiteFindBy($methode, array_values($params));
+   }
+    
+   
+   
 }
