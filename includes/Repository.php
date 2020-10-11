@@ -130,6 +130,43 @@ class Repository {
        return $this->traiteFindBy($methode, array_values($params));
    }
     
+   public function modifieTable($objet){
+       $tobjet = $this->object2Array($objet);
+       $parametres =array();
+       $sql = "update " . $this->table . " set ";
+       foreach($tobjet as $cle => $valeur){
+           if($cle != "id"){
+               if($this->gereNull($valeur)){
+                   $sql .= $cle . "= null,";
+               } else {
+                   $sql .= $cle . "= :" . $cle . " ,";
+                   $parametres[$cle] = $valeur;
+               }
+           }
+       }
+       $sql = substr($sql, 0, -1) . " where id=" . $tobjet["id"];
+       $unObjetPdo = Connexion::getConnexion();
+       $req = $unObjetPdo->prepare($sql);
+       $req->execute($parametres);
+   }
    
+   public function object2Array($objet) {
+       $tobjet = (array) $objet;
+       $tabloRetour = array();
+       foreach($tobjet as $cle => $valeur) {
+           $cle = str_replace("\0", "", $cle);
+           $cle = str_replace($this->classeNameLong, "", $cle);
+           $tabloRetour[$cle] = $valeur;
+       }
+       return $tabloRetour;
+   }
+   
+   public function gereNull($variable) {
+       $retour = false;
+       if($variable == '_null_' || $variable == "0"){
+           $retour = true;
+       }
+       return $retour;
+   }
    
 }

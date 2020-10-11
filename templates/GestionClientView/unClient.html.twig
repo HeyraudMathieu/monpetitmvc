@@ -1,7 +1,6 @@
 {%  extends "layout.html.twig" %}
 {% block contenu %}
     {% block recherche %}
-        <u><h3>Recherche</h3></u>
         <div class="container">
             <form action="?c=GestionClient&a=chercheUn" method="post">
                 {{ include('/blocks/clientRecherche.html.twig') }}

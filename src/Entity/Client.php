@@ -3,6 +3,7 @@
 namespace APP\Entity;
 
 class Client {
+    
 
     private $id;
     private $titreCli;
@@ -60,6 +61,26 @@ class Client {
 
     public function getTelCli() {
         return $this->telCli;
+    }
+    
+    function setAdresseRue1Cli($adresseRue1Cli): void {
+        $this->adresseRue1Cli = $adresseRue1Cli;
+    }
+
+    function setAdresseRue2Cli($adresseRue2Cli): void {
+        $this->adresseRue2Cli = $adresseRue2Cli;
+    }
+
+    function setCpCli($cpCli): void {
+        $this->cpCli = $cpCli;
+    }
+
+    function setVilleCli($villeCli): void {
+        $this->villeCli = $villeCli;
+    }
+
+    function setTelCli($telCli): void {
+        $this->telCli = $telCli;
     }
 
     public function __toString() {

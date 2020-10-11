@@ -118,8 +118,28 @@ class GestionClientController {
         $ids = $repository->findIds();
         $params['lesIds'] = $ids;
         $r = new ReflectionClass($this);
-        $vue = str_replace('Controller', 'View', $r->getShortName()) . "/unClientAjax.html.twig";
+        
+        if(!array_key_exists('id',$params)) {
+            $r = new ReflectionClass($this);
+            $vue = str_replace('Controller', 'View' , $r->getShortName()) . "/unClientAjax.html.twig";
+        } else {
+            $id = filter_var($params['id'], FILTER_VALIDATE_INT);
+            $unObjet = $repository->find($id);
+            $params['unClient'] = $unObjet;
+            $vue = "blocks/singleClientModif.html.twig";
+        }
         \Tools\MyTwig::afficheVue($vue, $params);
+    }
+    
+    public function modifierClient($params){
+        $repository = Repository::getRepository("APP\Entity\Client");
+        $id = filter_var($params['id'], FILTER_VALIDATE_INT);
+        $client = new Client($params);
+        if(strlen($client->getAdresseRue2Cli()) == 0) {
+            $client->setAdresseRue2Cli("_null_");
+        }
+        $repository->modifierTable($client);
+        header("Location:?c=gestionClient&a=chercheTous");
     }
     
 }

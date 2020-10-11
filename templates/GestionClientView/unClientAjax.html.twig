@@ -1,19 +1,14 @@
 {%  extends "layout.html.twig" %}
 {% block contenu %}
-    {% block recherche %}
-        <u><h3>Recherche</h3></u>
-        <div class="container">
-            <form action="?c=GestionClient&a=chercheUn" method="post">
-                {{ include('/blocks/clientRecherche.html.twig') }}
-                    <input type="submit" value="Voir" class="btn btn-default">
-            </form>
-        </div>
-    {% endblock %}
-    {% if unClient %}
     <div class="container">
-        {{ include('/blocks/singleClient.html.twig') }}
+        {% block recherche %}
+            {{ include('/blocks/clientRecherche.html.twig') }}
+        {% endblock %}
     </div>
-    {% endif %}
+    <div id="retour" class="container">
+        {% block retour %}
+        {% endblock %}
+    </div>
 {% endblock %}
 {% block footer %}
     {{ parent() }}
